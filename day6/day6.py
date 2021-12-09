@@ -13,20 +13,34 @@ lowPoints = []
 
 for x, row in enumerate(input):
     for y, column in enumerate(row):
-        print("Location: ",x,y)
-        print("Value: ",column)
-        isLowPointer=bool(True)
+
+        isLowPoint=bool(True)
         #left
-        if(y-1 > 0):
-            print("has left side")
+        if(y-1 >= 0):
+            if(column > input[x][y-1]):
+                isLowPoint=bool(False)
         #right
         if(y+1 < len(input[x])):
-            print("has right side")
+            if(column > input[x][y+1]):
+                isLowPoint=bool(False)
         #top
-        if(x-1 > 0):
-            print("has top side")
+        if(x-1 >= 0):
+            if(column > input[x-1][y]):
+                isLowPoint=bool(False)
         #below
         if(x+1 < len(input)):
-            print("has bottom")
-        #left
-        #right
+            if(column > input[x+1][y]):
+                isLowPoint=bool(False)
+
+        if(isLowPoint):
+            lowPoints.append(column)
+            print("Location: ",x,y)
+
+print("Low Points: ", lowPoints)     
+
+riskValueSum = 0;
+
+for lowPoint in lowPoints:
+    riskValueSum += lowPoint + 1
+
+print("Risk value sum",riskValueSum)
