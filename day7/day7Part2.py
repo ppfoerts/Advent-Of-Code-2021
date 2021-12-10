@@ -1,13 +1,6 @@
 #Day7
 #!/usr/bin/python
 
-illegalPoints = {
-    ')': 3,
-    ']': 57,
-    '}': 1197,
-    '>': 25137,
-}
-
 input = ['[({(<(())[]>[[{[]{<()<>>',
 '[(()[<>])]({[<{<<[]>>(',
 '{([(<{}[<>[]}>{[]{[(<()>',
@@ -114,43 +107,74 @@ input = ['({[[{[(([({((<[]>{[][]})[{<>[]}{[]{}}])[<[<><>][[]{}]>{[{}()][{}]}]}(<
 '(<((([(<<<<<{[{}{}][{}{}]}(<<><>>[[]<>])>{<{<>{}}<<>()>><{<>[]}[{}{}]>}>(((<<><>>({}())))([<<>[]>]<<{}()>([]',
 '<[{([<<<{{[<<({}())[<>]>[{[]{}}[()]]>{{[<>{}]{<><>}}<({}[]){()<>}>}]}}[{{({{()()}(()[])}<<[']
 
-#goal is to find unclosed brackets, so only if a right bracket does not have a left
-illegalBrackets=[]
+completionScores=[]
 for x,row in enumerate(input):
-    print("Row: ",x)
     print("contents: ",row)
     stack=[]
+    isCorrupt=False
     for y,column in enumerate(row):
         if(column == ')'):
             if(stack[-1] == '('):
                stack.pop()
             else:
                 print("Illegal Character found: ) ")
-                illegalBrackets.append(column)
+                isCorrupt=True
                 break
         elif(column == ']'):
             if(stack[-1] == '['):
                stack.pop()
             else:
                 print("Illegal Character found: ] ")
-                illegalBrackets.append(column)
+                isCorrupt=True
                 break
         elif(column == '}'):
             if(stack[-1] == '{'):
                stack.pop()
             else:
                 print("Illegal Character found: } ")
-                illegalBrackets.append(column)
+                isCorrupt=True
                 break
         elif(column == '>'):
             if(stack[-1] == '<'):
                stack.pop()
             else:
                 print("Illegal Character found: > ")
-                illegalBrackets.append(column)
+                isCorrupt=True
                 break 
         else:
             stack.append(column)
+    if(isCorrupt):
+        continue
+    else:
+        #complete uncomplete line
+        print("Stack: ",stack)
+        unClosed=[]
+        for column in stack:
+            if(column == '(' or column == '[' or column == '{' or column == '<'):
+                unClosed.append(column)
+            elif(column == ')'):
+                unClosed.remove('(')
+            elif(column == ']'):
+                unClosed.remove('[')
+            elif(column == '}'):
+                unClosed.remove('{')
+            elif(column == '>'):
+                unClosed.remove('<')
+        print("Unclosed: ",unClosed)
+        score = 0
+        for bracket in reversed(unClosed):
+            score = score * 5
+            if(bracket == '('):
+                score += 1
+            elif(bracket == '['):
+                score += 2
+            elif(bracket=='{'):
+                score += 3
+            elif(bracket=='<'):
+                score += 4
+        completionScores.append(score)
 
-print("Illegal Brackets",illegalBrackets)
-print(f'Total illegal points: {sum([illegalPoints[brackets] for brackets in illegalBrackets])}')
+completionScores = sorted(completionScores)
+print("Completion Scores: ",completionScores)
+
+print("Middle Score: ",completionScores[len(completionScores)//2])
