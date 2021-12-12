@@ -20,7 +20,7 @@ with open('input2.txt', 'r') as line:
 print(connections)
 
 
-def traverse(current,travelledPath):
+def traverse(current,travelledPath,secondSmallVisit):
     if(current == 'end'):
         #print(travelledPath)
         return 1
@@ -28,12 +28,14 @@ def traverse(current,travelledPath):
     for nextCave in connections[current]:
         haveAlreadyGoneThrough = (nextCave in travelledPath)
         if(nextCave.isupper()):
-            count += traverse(nextCave,travelledPath)
+            count += traverse(nextCave,travelledPath,secondSmallVisit)
         elif(nextCave not in travelledPath):
-            count += traverse(nextCave,travelledPath | {nextCave})
+            count += traverse(nextCave,travelledPath | {nextCave},secondSmallVisit)
+        elif(secondSmallVisit and nextCave != 'start'):
+            count += traverse(nextCave,travelledPath, False)
     return count
 
 
-numberOfPaths = traverse('start',{'start'})
+numberOfPaths = traverse('start',{'start'},True)
 
 print("Paths: ",numberOfPaths)
