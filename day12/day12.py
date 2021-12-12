@@ -1,31 +1,31 @@
 #Day12
 #!/usr/bin/python
 
-from collections import defaultdict
-
-
-connections=[]
-connectionsDict=defaultdict(list)
+connections={}
 paths=[]
 
-with open('input.txt', 'r') as line:
+with open('input2.txt', 'r') as line:
     for item in line:
-        connections.append(item.strip().split("-"))
-        print(item)
+        a, b = item.strip().split("-")
+        if a not in connections:
+            connections[a] = set({b})
+        else:
+            connections[a].add(b)
+        if b not in connections:
+            connections[b] = set({a})
+        else:
+            connections[b].add(a)
 
-for connection in connections:
-    connectionsDict[connection[0]].append(connection[1])
-    connectionsDict[connection[1]].append(connection[0])
 
-print(connectionsDict)
+print(connections)
 
 
 def traverse(current,travelledPath):
     if(current == 'end'):
-        print(travelledPath)
+        #print(travelledPath)
         return 1
     count = 0
-    for nextCave in connectionsDict[current]:
+    for nextCave in connections[current]:
         haveAlreadyGoneThrough = (nextCave in travelledPath)
         if(nextCave.isupper()):
             count += traverse(nextCave,travelledPath)
