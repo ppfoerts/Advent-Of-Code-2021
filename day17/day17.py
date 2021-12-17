@@ -27,24 +27,25 @@ def fireProbe(initialVelocity, targetArea):
         if(withinXRange and withinYRange):
             print("With initial velocity: ",init)
             return highestY
-        if(tooFar or tooDeep):
-            return -1
+        if(tooDeep or tooFar):
+            return -1001
 
 
-targetArea=[[287,308],[-76,-48]]
+targetArea=[[287,309],[-76,-48]]
 #targetArea=[[20,30],[-10,-5]]
 
 initialVelocity = [10,200]
 highestY = 0;
 numberOfHits = 0
-for x in range(0,308):
-    for y in range(-400,400):
+
+for x in range(0,500):
+    for y in range(-1000,1000):
         currentHighestY = fireProbe([x,y],targetArea)
         if(highestY < currentHighestY):
             print(currentHighestY)
             highestY = currentHighestY
-        if(currentHighestY != -1):
+        if(currentHighestY != -1001):
             numberOfHits += 1
 
-print("Max Height Reached: ", currentHighestY)
+print("Max Height Reached: ", highestY)
 print("Number of Hits: ", numberOfHits)
